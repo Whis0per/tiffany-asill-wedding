@@ -1,0 +1,635 @@
+:root {
+  --cream: #f4f0e9;
+  --warm-white: #faf8f4;
+  --dark: #25221f;
+  --muted: #817b73;
+  --line: rgba(37, 34, 31, 0.18);
+
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "DM Sans", Arial, sans-serif;
+}
+
+
+/* ------------------------------
+   RESET
+------------------------------ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--dark);
+  font-family: var(--sans);
+  font-weight: 300;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* ------------------------------
+   HEADER
+------------------------------ */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 100;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 25px 5vw;
+
+  color: white;
+
+  mix-blend-mode: difference;
+}
+
+.logo {
+  font-family: var(--serif);
+  font-size: 25px;
+  letter-spacing: 0.05em;
+}
+
+.header nav {
+  display: flex;
+  gap: 28px;
+}
+
+.header nav a {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+
+  opacity: 0.85;
+
+  transition: opacity 0.3s ease;
+}
+
+.header nav a:hover {
+  opacity: 1;
+}
+
+
+/* ------------------------------
+   HERO
+------------------------------ */
+
+.hero {
+  position: relative;
+
+  min-height: 100vh;
+  min-height: 100svh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  color: white;
+
+  overflow: hidden;
+
+  background-image:
+    url("https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2200&q=90");
+
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.12),
+      rgba(0, 0, 0, 0.30)
+    );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+
+  padding: 20px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+
+  font-size: 10px;
+}
+
+.hero h1 {
+  margin: 35px 0;
+
+  font-family: var(--serif);
+
+  font-size: clamp(75px, 12vw, 170px);
+
+  font-weight: 300;
+
+  line-height: 0.75;
+}
+
+.hero h1 span {
+  font-style: italic;
+}
+
+.date {
+  font-size: 11px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.17em;
+}
+
+.scroll {
+  display: inline-block;
+
+  margin-top: 80px;
+
+  font-size: 10px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.16em;
+}
+
+
+/* ------------------------------
+   GENERAL SECTIONS
+------------------------------ */
+
+.section {
+  padding: 130px 7vw;
+}
+
+.section-label {
+  margin-bottom: 80px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.20em;
+}
+
+.two-column {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10vw;
+
+  max-width: 1100px;
+
+  margin: auto;
+}
+
+.two-column h2 {
+  margin: 0;
+
+  font-family: var(--serif);
+
+  font-size: clamp(45px, 6vw, 80px);
+
+  font-weight: 300;
+
+  line-height: 0.92;
+}
+
+.text {
+  max-width: 430px;
+
+  padding-top: 10px;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+}
+
+.text p {
+  margin: 0 0 30px;
+}
+
+
+/* ------------------------------
+   THE DAY
+------------------------------ */
+
+.day {
+  background: #ebe5dc;
+}
+
+.center {
+  text-align: center;
+}
+
+.center h2 {
+  margin: 25px 0 110px;
+
+  font-family: var(--serif);
+
+  font-size: clamp(55px, 8vw, 100px);
+
+  font-weight: 300;
+
+  line-height: 0.85;
+}
+
+.timeline {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  max-width: 1050px;
+
+  margin: auto;
+
+  border-top: 1px solid var(--line);
+}
+
+.timeline div {
+  padding: 35px 20px;
+
+  border-right: 1px solid var(--line);
+}
+
+.timeline div:last-child {
+  border-right: none;
+}
+
+.timeline span {
+  font-family: var(--serif);
+
+  font-size: 28px;
+}
+
+.timeline h3 {
+  margin: 28px 0 8px;
+
+  font-family: var(--serif);
+
+  font-size: 27px;
+
+  font-weight: 400;
+}
+
+.timeline p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+
+/* ------------------------------
+   CHATEAU
+------------------------------ */
+
+.venue {
+  position: relative;
+
+  min-height: 90vh;
+
+  display: flex;
+  align-items: flex-end;
+
+  color: white;
+
+  overflow: hidden;
+}
+
+.venue-image {
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(0, 0, 0, 0.22),
+      rgba(0, 0, 0, 0.30)
+    ),
+    url("https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2200&q=90");
+
+  background-size: cover;
+  background-position: center;
+}
+
+.venue-content {
+  position: relative;
+
+  z-index: 2;
+
+  padding: 8vw;
+}
+
+.venue-content h2 {
+  margin: 25px 0;
+
+  font-family: var(--serif);
+
+  font-size: clamp(65px, 10vw, 140px);
+
+  font-weight: 300;
+
+  line-height: 0.75;
+}
+
+
+/* ------------------------------
+   GALLERY
+------------------------------ */
+
+.gallery-section {
+  background: var(--warm-white);
+}
+
+.gallery {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 18px;
+
+  max-width: 1150px;
+
+  margin: auto;
+}
+
+.gallery img {
+  height: 600px;
+
+  object-fit: cover;
+}
+
+.gallery img:nth-child(2) {
+  margin-top: 100px;
+}
+
+.gallery img:nth-child(3) {
+  height: 450px;
+}
+
+.gallery img:nth-child(4) {
+  margin-top: -50px;
+
+  height: 600px;
+}
+
+.stock-note {
+  max-width: 1150px;
+
+  margin: 30px auto 0;
+
+  color: var(--muted);
+
+  font-size: 10px;
+
+  letter-spacing: 0.05em;
+}
+
+
+/* ------------------------------
+   RSVP
+------------------------------ */
+
+.rsvp {
+  background: #e8e0d6;
+
+  text-align: center;
+}
+
+.rsvp-content {
+  max-width: 700px;
+
+  margin: auto;
+}
+
+.rsvp h2 {
+  margin: 25px 0;
+
+  font-family: var(--serif);
+
+  font-size: clamp(65px, 9vw, 110px);
+
+  font-weight: 300;
+
+  line-height: 0.85;
+}
+
+.rsvp p:not(.section-label):not(.eyebrow) {
+  color: var(--muted);
+
+  font-size: 14px;
+}
+
+
+/* ------------------------------
+   FAQ
+------------------------------ */
+
+.faq {
+  background: #f0ebe4;
+}
+
+.questions details {
+  border-top: 1px solid var(--line);
+}
+
+.questions details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.questions summary {
+  padding: 25px 0;
+
+  cursor: pointer;
+
+  list-style: none;
+
+  font-family: var(--serif);
+
+  font-size: 27px;
+}
+
+.questions summary::-webkit-details-marker {
+  display: none;
+}
+
+.questions summary::after {
+  content: "+";
+
+  float: right;
+
+  font-family: var(--sans);
+
+  font-size: 16px;
+}
+
+.questions details[open] summary::after {
+  content: "−";
+}
+
+.questions details p {
+  max-width: 600px;
+
+  padding: 0 0 25px;
+
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+
+/* ------------------------------
+   FINAL
+------------------------------ */
+
+.final {
+  padding: 160px 20px;
+
+  text-align: center;
+}
+
+.final h2 {
+  margin: 35px 0;
+
+  font-family: var(--serif);
+
+  font-size: clamp(75px, 13vw, 170px);
+
+  font-weight: 300;
+
+  line-height: 0.75;
+}
+
+.final > p:last-child {
+  font-size: 10px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.18em;
+}
+
+
+/* ------------------------------
+   FOOTER
+------------------------------ */
+
+footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  padding: 25px 7vw;
+
+  border-top: 1px solid var(--line);
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.15em;
+}
+
+
+/* ------------------------------
+   MOBILE
+------------------------------ */
+
+@media (max-width: 750px) {
+
+  .header {
+    padding: 20px 6vw;
+  }
+
+  .header nav {
+    display: none;
+  }
+
+  .section {
+    padding: 90px 7vw;
+  }
+
+  .section-label {
+    margin-bottom: 55px;
+  }
+
+  .two-column {
+    grid-template-columns: 1fr;
+
+    gap: 55px;
+  }
+
+  .hero h1 {
+    font-size: 78px;
+  }
+
+  .timeline {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .timeline div {
+    min-height: 170px;
+  }
+
+  .timeline div:nth-child(2) {
+    border-right: none;
+  }
+
+  .venue {
+    min-height: 80vh;
+  }
+
+  .venue-content {
+    padding: 10vw 7vw;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery img,
+  .gallery img:nth-child(3),
+  .gallery img:nth-child(4) {
+    height: 500px;
+
+    margin: 0;
+  }
+
+  .final {
+    padding: 120px 20px;
+  }
+
+}
