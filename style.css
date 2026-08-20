@@ -76,13 +76,22 @@ a {
 }
 
 .header nav a {
+  position: relative;
+
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.16em;
 
-  opacity: 0.85;
+  opacity: 0.55;
 
-  transition: opacity 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    font-weight 0.3s ease;
+}
+
+.header nav a.active {
+  opacity: 1;
+  font-weight: 500;
 }
 
 .header nav a:hover {
