@@ -592,56 +592,118 @@
 
   function renderAttendees() {
 
-    attendeeList.innerHTML = "";
+  attendeeList.innerHTML = "";
 
 
-    attendees.forEach((person, index) => {
-
-      const wrapper =
-        document.createElement("div");
-
-      wrapper.className =
-        "attendee";
+  const invitedGuests =
+    currentInvitation.invitedGuests || [];
 
 
-      const nameLabel =
-        document.createElement("label");
+  invitedGuests.forEach((guestName, index) => {
 
-      nameLabel.textContent =
-        index === 0
-          ? "Guest 1"
-          : `Guest ${index + 1}`;
+    const wrapper =
+      document.createElement("div");
 
-
-      const nameInput =
-        document.createElement("input");
-
-      nameInput.type = "text";
-
-      nameInput.value =
-        person.name || "";
-
-      nameInput.placeholder =
-        "Full name";
-
-      nameInput.className =
-        "attendee-name";
+    wrapper.className =
+      "attendee";
 
 
-      nameInput.addEventListener(
-        "input",
-        () => {
+    const choice =
+      document.createElement("label");
 
-          attendees[index].name =
-            nameInput.value;
+    choice.className =
+      "choice";
 
-        }
+
+    const checkbox =
+      document.createElement("input");
+
+    checkbox.type =
+      "checkbox";
+
+    checkbox.value =
+      guestName;
+
+    checkbox.checked =
+      attendees.some(
+        person =>
+          person.name === guestName
       );
 
 
-      wrapper.appendChild(nameLabel);
-      wrapper.appendChild(nameInput);
+    checkbox.addEventListener(
+      "change",
+      () => {
 
+        if (checkbox.checked) {
+
+          /*
+            Add this guest.
+          */
+
+          const existing =
+            attendees.find(
+              person =>
+                person.name === guestName
+            );
+
+
+          if (!existing) {
+
+            attendees.push({
+
+              name:
+                guestName,
+
+              menu: ""
+
+            });
+
+          }
+
+        } else {
+
+          /*
+            Remove this guest.
+          */
+
+          attendees =
+            attendees.filter(
+              person =>
+                person.name !== guestName
+            );
+
+        }
+
+
+        renderAttendees();
+
+      }
+    );
+
+
+    const span =
+      document.createElement("span");
+
+    span.textContent =
+      guestName;
+
+
+    choice.appendChild(checkbox);
+
+    choice.appendChild(span);
+
+    wrapper.appendChild(choice);
+
+
+    /*
+      Show menu choices only for guests
+      who are currently selected.
+    */
+
+    if (
+      checkbox.checked
+    ) {
 
       const menuLabel =
         document.createElement("p");
@@ -650,31 +712,31 @@
         "attendee-menu-label";
 
       menuLabel.textContent =
-        "Menu";
+        `${guestName}'s menu`;
 
 
-      wrapper.appendChild(menuLabel);
+      wrapper.appendChild(
+        menuLabel
+      );
 
 
-      const menuOptions = [
+      [
         "Meat",
         "Vegetarian / Dairy Free"
-      ];
+      ].forEach(menu => {
 
-
-      menuOptions.forEach(menu => {
-
-        const choice =
+        const menuChoice =
           document.createElement("label");
 
-        choice.className =
+        menuChoice.className =
           "choice";
 
 
         const radio =
           document.createElement("input");
 
-        radio.type = "radio";
+        radio.type =
+          "radio";
 
         radio.name =
           `menu-${index}`;
@@ -683,59 +745,75 @@
           menu;
 
         radio.checked =
-          person.menu === menu;
+          attendees.find(
+            person =>
+              person.name === guestName
+          )?.menu === menu;
 
 
         radio.addEventListener(
           "change",
           () => {
 
-            attendees[index].menu =
-              menu;
+            const person =
+              attendees.find(
+                person =>
+                  person.name === guestName
+              );
+
+
+            if (person) {
+
+              person.menu =
+                menu;
+
+            }
 
           }
         );
 
 
-        const span =
+        const menuText =
           document.createElement("span");
 
-        span.textContent =
+        menuText.textContent =
           menu;
 
 
-        choice.appendChild(radio);
-        choice.appendChild(span);
+        menuChoice.appendChild(
+          radio
+        );
 
-        wrapper.appendChild(choice);
+        menuChoice.appendChild(
+          menuText
+        );
+
+
+        wrapper.appendChild(
+          menuChoice
+        );
 
       });
 
-
-      attendeeList.appendChild(wrapper);
-
-    });
-
-
-    /*
-      Hide "Add a guest" once the invitation
-      has reached its maximum.
-    */
-
-    if (
-      attendees.length >=
-      currentInvitation.maxGuests
-    ) {
-
-      hide(addGuestButton);
-
-    } else {
-
-      show(addGuestButton);
-
     }
 
-  }
+
+    attendeeList.appendChild(
+      wrapper
+    );
+
+  });
+
+
+  /*
+    There is no need for an "Add a guest"
+    button anymore because guests are
+    selected from the invited list.
+  */
+
+  hide(addGuestButton);
+
+}
 
 
   function selectInvitation(invitation) {
