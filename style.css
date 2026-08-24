@@ -642,3 +642,307 @@ footer {
   }
 
 }
+/* =========================
+   RSVP
+   ========================= */
+
+.rsvp-content {
+  max-width: 620px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.rsvp-intro {
+  max-width: 460px;
+  margin: 0 auto 45px;
+}
+
+.rsvp-step {
+  width: 100%;
+}
+
+.rsvp-step label:not(.choice) {
+  display: block;
+  margin-bottom: 12px;
+
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.search-row input {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 15px 16px;
+
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 0;
+
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  transition: border-color 0.3s ease;
+}
+
+.search-row input:focus {
+  border-color: rgba(0, 0, 0, 0.55);
+}
+
+.search-row button,
+.rsvp-submit {
+  padding: 15px 22px;
+
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+
+  font-family: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.search-row button:hover,
+.rsvp-submit:hover {
+  opacity: 0.8;
+}
+
+.search-row button:disabled,
+.rsvp-submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.rsvp-message {
+  min-height: 22px;
+
+  margin-top: 18px;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.guest-results {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  max-width: 420px;
+  margin: 20px auto 0;
+}
+
+.guest-result {
+  width: 100%;
+
+  padding: 14px 18px;
+
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.guest-result:hover {
+  background: #111;
+  color: #fff;
+}
+
+
+/* RSVP FORM */
+
+.selected-guest {
+  margin-bottom: 35px;
+
+  font-size: 16px;
+}
+
+.current-response {
+  margin: -20px auto 35px;
+
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+fieldset {
+  margin: 0 auto 35px;
+
+  padding: 0;
+
+  border: 0;
+
+  max-width: 420px;
+}
+
+fieldset legend {
+  margin-bottom: 18px;
+
+  width: 100%;
+
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 14px 16px;
+
+  margin-bottom: 8px;
+
+  border: 1px solid rgba(0, 0, 0, 0.14);
+
+  cursor: pointer;
+
+  text-align: left;
+
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.choice:hover {
+  border-color: rgba(0, 0, 0, 0.45);
+}
+
+.choice input {
+  accent-color: #111;
+}
+
+.rsvp-submit {
+  margin-top: 5px;
+}
+
+
+/* CONFIRMATION */
+
+.rsvp-success {
+  max-width: 520px;
+  margin: 0 auto;
+
+  padding: 55px 35px;
+
+  border: 1px solid rgba(0, 0, 0, 0.14);
+
+  text-align: center;
+
+  animation: rsvpFadeIn 0.7s ease both;
+}
+
+.rsvp-success h3 {
+  margin: 18px 0;
+
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+#confirmation-text {
+  max-width: 360px;
+  margin: 0 auto 30px;
+
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.text-button {
+  margin-top: 25px;
+
+  padding: 0;
+
+  border: 0;
+  background: none;
+
+  font-family: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+
+  text-decoration: underline;
+  text-underline-offset: 5px;
+
+  cursor: pointer;
+
+  opacity: 0.65;
+
+  transition: opacity 0.3s ease;
+}
+
+.text-button:hover {
+  opacity: 1;
+}
+
+
+/* HIDDEN */
+
+.hidden {
+  display: none !important;
+}
+
+
+/* ANIMATION */
+
+@keyframes rsvpFadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .search-row {
+    flex-direction: column;
+  }
+
+  .search-row button {
+    width: 100%;
+  }
+
+  .rsvp-success {
+    padding: 45px 22px;
+  }
+
+  .choice {
+    padding: 15px;
+  }
+
+}
