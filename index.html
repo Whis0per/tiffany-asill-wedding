@@ -522,5 +522,509 @@
     observer.observe(section);
   });
 </script>
+
+<script>
+  const RSVP_API =
+    "https://script.google.com/macros/s/AKfycbxnuh3WpD5LbfmdDYHHNTH1v3uBLmhUAbbZPbBVnfXqyXOgHsLnxV-xinXWoPz4BMRTxw/exec";
+
+
+  const searchInput =
+    document.getElementById("guest-search");
+
+  const searchButton =
+    document.getElementById("search-button");
+
+  const searchMessage =
+    document.getElementById("search-message");
+
+  const guestResults =
+    document.getElementById("guest-results");
+
+  const rsvpForm =
+    document.getElementById("rsvp-form");
+
+  const rsvpSearch =
+    document.getElementById("rsvp-search");
+
+  const selectedName =
+    document.getElementById("selected-name");
+
+  const currentResponse =
+    document.getElementById("current-response");
+
+  const menuOptions =
+    document.getElementById("menu-options");
+
+  const submitButton =
+    document.getElementById("submit-rsvp");
+
+  const rsvpMessage =
+    document.getElementById("rsvp-message");
+
+  const success =
+    document.getElementById("rsvp-success");
+
+  const confirmationText =
+    document.getElementById("confirmation-text");
+
+  const changeGuest =
+    document.getElementById("change-guest");
+
+  const editRsvp =
+    document.getElementById("edit-rsvp");
+
+
+  let selectedGuest = null;
+
+
+  function showMessage(element, message) {
+    element.textContent = message;
+  }
+
+
+  function clearResults() {
+    guestResults.innerHTML = "";
+  }
+
+
+  async function searchGuest() {
+
+    const name =
+      searchInput.value.trim();
+
+
+    if (!name) {
+
+      showMessage(
+        searchMessage,
+        "Please enter your name."
+      );
+
+      return;
+
+    }
+
+
+    clearResults();
+
+    showMessage(
+      searchMessage,
+      "Looking for your name…"
+    );
+
+
+    try {
+
+      const response =
+        await fetch(
+          `${RSVP_API}?action=search&name=${encodeURIComponent(name)}`
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!data.matches || !data.matches.length) {
+
+        showMessage(
+          searchMessage,
+          "We couldn't find that name. Please check the spelling and try again."
+        );
+
+        return;
+
+      }
+
+
+      showMessage(
+        searchMessage,
+        "Please select your name:"
+      );
+
+
+      data.matches.forEach((guest) => {
+
+        const button =
+          document.createElement("button");
+
+
+        button.type = "button";
+
+        button.className =
+          "guest-result";
+
+        button.textContent =
+          guest.name;
+
+
+        button.addEventListener(
+          "click",
+          () => selectGuest(guest)
+        );
+
+
+        guestResults.appendChild(button);
+
+      });
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        searchMessage,
+        "Something went wrong. Please try again."
+      );
+
+    }
+
+  }
+
+
+  function selectGuest(guest) {
+
+    selectedGuest = guest;
+
+
+    rsvpSearch.classList.add("hidden");
+
+    rsvpForm.classList.remove("hidden");
+
+
+    selectedName.textContent =
+      guest.name;
+
+
+    if (
+      guest.status &&
+      guest.status !== "Not yet responded"
+    ) {
+
+      currentResponse.textContent =
+        `We've already received your RSVP: ${guest.status}${guest.menu ? ` · ${guest.menu}` : ""}. You can change it below.`;
+
+    } else {
+
+      currentResponse.textContent =
+        "We haven't received your RSVP yet.";
+
+    }
+
+
+    document
+      .querySelectorAll(
+        'input[name="attendance"]'
+      )
+      .forEach(
+        input => {
+          input.checked =
+            input.value === guest.status;
+        }
+      );
+
+
+    document
+      .querySelectorAll(
+        'input[name="menu"]'
+      )
+      .forEach(
+        input => {
+          input.checked =
+            input.value === guest.menu;
+        }
+      );
+
+
+    updateMenuVisibility();
+
+  }
+
+
+  function updateMenuVisibility() {
+
+    const attendance =
+      document.querySelector(
+        'input[name="attendance"]:checked'
+      );
+
+
+    if (
+      attendance &&
+      attendance.value === "Yes"
+    ) {
+
+      menuOptions.classList.remove(
+        "hidden"
+      );
+
+    } else {
+
+      menuOptions.classList.add(
+        "hidden"
+      );
+
+
+      document
+        .querySelectorAll(
+          'input[name="menu"]'
+        )
+        .forEach(
+          input => {
+            input.checked = false;
+          }
+        );
+
+    }
+
+  }
+
+
+  document
+    .querySelectorAll(
+      'input[name="attendance"]'
+    )
+    .forEach(
+      input => {
+
+        input.addEventListener(
+          "change",
+          updateMenuVisibility
+        );
+
+      }
+    );
+
+
+  async function submitRsvp() {
+
+    if (!selectedGuest) {
+      return;
+    }
+
+
+    const attendance =
+      document.querySelector(
+        'input[name="attendance"]:checked'
+      );
+
+
+    if (!attendance) {
+
+      showMessage(
+        rsvpMessage,
+        "Please choose whether you'll be joining us."
+      );
+
+      return;
+
+    }
+
+
+    let menu = "";
+
+
+    if (attendance.value === "Yes") {
+
+      const menuChoice =
+        document.querySelector(
+          'input[name="menu"]:checked'
+        );
+
+
+      if (!menuChoice) {
+
+        showMessage(
+          rsvpMessage,
+          "Please choose your menu."
+        );
+
+        return;
+
+      }
+
+
+      menu =
+        menuChoice.value;
+
+    }
+
+
+    submitButton.disabled = true;
+
+    showMessage(
+      rsvpMessage,
+      "Saving your RSVP…"
+    );
+
+
+    try {
+
+      const response =
+        await fetch(
+          RSVP_API,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "text/plain;charset=utf-8"
+            },
+
+            body: JSON.stringify({
+
+              action: "rsvp",
+
+              id:
+                selectedGuest.id,
+
+              status:
+                attendance.value,
+
+              menu:
+                menu
+
+            })
+
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!data.ok) {
+
+        throw new Error(
+          data.error ||
+          "Unable to save RSVP"
+        );
+
+      }
+
+
+      selectedGuest.status =
+        data.status;
+
+      selectedGuest.menu =
+        data.menu;
+
+
+      rsvpForm.classList.add(
+        "hidden"
+      );
+
+      success.classList.remove(
+        "hidden"
+      );
+
+
+      confirmationText.textContent =
+        data.status === "Yes"
+          ? `We've saved your RSVP as attending, with the ${data.menu} menu.`
+          : "We've saved your RSVP as unable to attend.";
+
+    } catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        rsvpMessage,
+        "We couldn't save your RSVP. Please try again."
+      );
+
+    } finally {
+
+      submitButton.disabled = false;
+
+    }
+
+  }
+
+
+  function resetRsvp() {
+
+    selectedGuest = null;
+
+
+    success.classList.add(
+      "hidden"
+    );
+
+    rsvpForm.classList.add(
+      "hidden"
+    );
+
+    rsvpSearch.classList.remove(
+      "hidden"
+    );
+
+
+    searchInput.value = "";
+
+    clearResults();
+
+    showMessage(
+      searchMessage,
+      ""
+    );
+
+    showMessage(
+      rsvpMessage,
+      ""
+    );
+
+  }
+
+
+  submitButton.addEventListener(
+    "click",
+    submitRsvp
+  );
+
+
+  changeGuest.addEventListener(
+    "click",
+    resetRsvp
+  );
+
+
+  editRsvp.addEventListener(
+    "click",
+    () => {
+
+      success.classList.add(
+        "hidden"
+      );
+
+      rsvpForm.classList.remove(
+        "hidden"
+      );
+
+    }
+  );
+
+
+  searchButton.addEventListener(
+    "click",
+    searchGuest
+  );
+
+
+  searchInput.addEventListener(
+    "keydown",
+    (event) => {
+
+      if (event.key === "Enter") {
+
+        searchGuest();
+
+      }
+
+    }
+  );
+</script>
 </body>
 </html>
