@@ -219,27 +219,192 @@
 
     <section id="rsvp" class="section rsvp">
 
-      <div class="rsvp-content">
+  <div class="rsvp-content">
 
-        <p class="section-label">
-          05 — RSVP
-        </p>
+    <p class="section-label">
+      05 — RSVP
+    </p>
 
-        <p class="eyebrow">
-          We'd love to celebrate with you
-        </p>
+    <p class="eyebrow">
+      We'd love to celebrate with you
+    </p>
 
-        <h2>
-          Will you join us?
-        </h2>
+    <h2>
+      Will you join us?
+    </h2>
 
-        <p>
-          RSVP details coming soon.
-        </p>
+    <p class="rsvp-intro">
+      Find your name below to let us know if you'll be joining us.
+    </p>
+
+
+    <!-- STEP 1: FIND GUEST -->
+
+    <div id="rsvp-search" class="rsvp-step">
+
+      <label for="guest-search">
+        Your name
+      </label>
+
+      <div class="search-row">
+
+        <input
+          id="guest-search"
+          type="text"
+          placeholder="Enter your full name"
+          autocomplete="off"
+        >
+
+        <button
+          id="search-button"
+          type="button"
+        >
+          Find me
+        </button>
 
       </div>
 
-    </section>
+      <p
+        id="search-message"
+        class="rsvp-message"
+      ></p>
+
+      <div
+        id="guest-results"
+        class="guest-results"
+      ></div>
+
+    </div>
+
+
+    <!-- STEP 2: RSVP -->
+
+    <div
+      id="rsvp-form"
+      class="rsvp-step hidden"
+    >
+
+      <p class="selected-guest">
+        Welcome, <strong id="selected-name"></strong>.
+      </p>
+
+      <p
+        id="current-response"
+        class="current-response"
+      ></p>
+
+
+      <fieldset>
+
+        <legend>
+          Will you be joining us?
+        </legend>
+
+        <label class="choice">
+          <input
+            type="radio"
+            name="attendance"
+            value="Yes"
+          >
+          <span>Yes, I'll be there</span>
+        </label>
+
+        <label class="choice">
+          <input
+            type="radio"
+            name="attendance"
+            value="No"
+          >
+          <span>Sadly, I can't make it</span>
+        </label>
+
+      </fieldset>
+
+
+      <fieldset
+        id="menu-options"
+        class="hidden"
+      >
+
+        <legend>
+          Your menu
+        </legend>
+
+        <label class="choice">
+          <input
+            type="radio"
+            name="menu"
+            value="Meat"
+          >
+          <span>Meat</span>
+        </label>
+
+        <label class="choice">
+          <input
+            type="radio"
+            name="menu"
+            value="Vegetarian / Dairy Free"
+          >
+          <span>Vegetarian / Dairy Free</span>
+        </label>
+
+      </fieldset>
+
+
+      <button
+        id="submit-rsvp"
+        class="rsvp-submit"
+        type="button"
+      >
+        Confirm RSVP
+      </button>
+
+      <p
+        id="rsvp-message"
+        class="rsvp-message"
+      ></p>
+
+      <button
+        id="change-guest"
+        class="text-button"
+        type="button"
+      >
+        ← Choose a different name
+      </button>
+
+    </div>
+
+
+    <!-- STEP 3: CONFIRMATION -->
+
+    <div
+      id="rsvp-success"
+      class="rsvp-success hidden"
+    >
+
+      <p class="eyebrow">
+        Thank you
+      </p>
+
+      <h3>
+        We can't wait to celebrate with you.
+      </h3>
+
+      <p id="confirmation-text"></p>
+
+      <button
+        id="edit-rsvp"
+        class="text-button"
+        type="button"
+      >
+        Change my response
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
 
 
     <!-- FAQ -->
