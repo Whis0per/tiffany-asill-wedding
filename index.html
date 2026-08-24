@@ -279,100 +279,96 @@
 
     <!-- STEP 2: RSVP -->
 
-    <div
-      id="rsvp-form"
-      class="rsvp-step hidden"
-    >
+<div
+  id="rsvp-form"
+  class="rsvp-step hidden"
+>
 
-      <p class="selected-guest">
-        Welcome, <strong id="selected-name"></strong>.
-      </p>
+  <p class="selected-guest">
+    Welcome, <strong id="selected-name"></strong>.
+  </p>
 
-      <p
-        id="current-response"
-        class="current-response"
-      ></p>
-
-
-      <fieldset>
-
-        <legend>
-          Will you be joining us?
-        </legend>
-
-        <label class="choice">
-          <input
-            type="radio"
-            name="attendance"
-            value="Yes"
-          >
-          <span>Yes, I'll be there</span>
-        </label>
-
-        <label class="choice">
-          <input
-            type="radio"
-            name="attendance"
-            value="No"
-          >
-          <span>Sadly, I can't make it</span>
-        </label>
-
-      </fieldset>
+  <p
+    id="invitation-info"
+    class="current-response"
+  ></p>
 
 
-      <fieldset
-        id="menu-options"
-        class="hidden"
+  <fieldset>
+
+    <legend>
+      Will you be joining us?
+    </legend>
+
+    <label class="choice">
+      <input
+        type="radio"
+        name="attendance"
+        value="Yes"
       >
+      <span>Yes, I'll be there</span>
+    </label>
 
-        <legend>
-          Your menu
-        </legend>
+    <label class="choice">
+      <input
+        type="radio"
+        name="attendance"
+        value="No"
+      >
+      <span>Sadly, I can't make it</span>
+    </label>
 
-        <label class="choice">
-          <input
-            type="radio"
-            name="menu"
-            value="Meat"
-          >
-          <span>Meat</span>
-        </label>
+  </fieldset>
 
-        <label class="choice">
-          <input
-            type="radio"
-            name="menu"
-            value="Vegetarian / Dairy Free"
-          >
-          <span>Vegetarian / Dairy Free</span>
-        </label>
 
-      </fieldset>
+  <div
+    id="attendee-section"
+    class="hidden"
+  >
 
+    <fieldset>
+
+      <legend>
+        Who will be attending?
+      </legend>
+
+      <div id="attendee-list"></div>
 
       <button
-        id="submit-rsvp"
-        class="rsvp-submit"
-        type="button"
-      >
-        Confirm RSVP
-      </button>
-
-      <p
-        id="rsvp-message"
-        class="rsvp-message"
-      ></p>
-
-      <button
-        id="change-guest"
+        id="add-guest"
         class="text-button"
         type="button"
       >
-        ← Choose a different name
+        + Add a guest
       </button>
 
-    </div>
+    </fieldset>
+
+  </div>
+
+
+  <button
+    id="submit-rsvp"
+    class="rsvp-submit"
+    type="button"
+  >
+    Confirm RSVP
+  </button>
+
+  <p
+    id="rsvp-message"
+    class="rsvp-message"
+  ></p>
+
+  <button
+    id="change-guest"
+    class="text-button"
+    type="button"
+  >
+    ← Choose a different name
+  </button>
+
+</div>
 
 
     <!-- STEP 3: CONFIRMATION -->
@@ -540,20 +536,26 @@
   const guestResults =
     document.getElementById("guest-results");
 
-  const rsvpForm =
-    document.getElementById("rsvp-form");
-
   const rsvpSearch =
     document.getElementById("rsvp-search");
+
+  const rsvpForm =
+    document.getElementById("rsvp-form");
 
   const selectedName =
     document.getElementById("selected-name");
 
-  const currentResponse =
-    document.getElementById("current-response");
+  const invitationInfo =
+    document.getElementById("invitation-info");
 
-  const menuOptions =
-    document.getElementById("menu-options");
+  const attendeeSection =
+    document.getElementById("attendee-section");
+
+  const attendeeList =
+    document.getElementById("attendee-list");
+
+  const addGuestButton =
+    document.getElementById("add-guest");
 
   const submitButton =
     document.getElementById("submit-rsvp");
@@ -561,33 +563,261 @@
   const rsvpMessage =
     document.getElementById("rsvp-message");
 
-  const success =
+  const changeGuestButton =
+    document.getElementById("change-guest");
+
+  const rsvpSuccess =
     document.getElementById("rsvp-success");
 
   const confirmationText =
     document.getElementById("confirmation-text");
 
-  const changeGuest =
-    document.getElementById("change-guest");
-
-  const editRsvp =
+  const editRsvpButton =
     document.getElementById("edit-rsvp");
 
 
-  let selectedGuest = null;
+  let currentInvitation = null;
+  let attendees = [];
 
 
-  function showMessage(element, message) {
-    element.textContent = message;
+  function show(element) {
+    element.classList.remove("hidden");
   }
 
 
-  function clearResults() {
-    guestResults.innerHTML = "";
+  function hide(element) {
+    element.classList.add("hidden");
   }
 
 
-  async function searchGuest() {
+  function renderAttendees() {
+
+    attendeeList.innerHTML = "";
+
+
+    attendees.forEach((person, index) => {
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className =
+        "attendee";
+
+
+      const nameLabel =
+        document.createElement("label");
+
+      nameLabel.textContent =
+        index === 0
+          ? "Guest 1"
+          : `Guest ${index + 1}`;
+
+
+      const nameInput =
+        document.createElement("input");
+
+      nameInput.type = "text";
+
+      nameInput.value =
+        person.name || "";
+
+      nameInput.placeholder =
+        "Full name";
+
+      nameInput.className =
+        "attendee-name";
+
+
+      nameInput.addEventListener(
+        "input",
+        () => {
+
+          attendees[index].name =
+            nameInput.value;
+
+        }
+      );
+
+
+      wrapper.appendChild(nameLabel);
+      wrapper.appendChild(nameInput);
+
+
+      const menuLabel =
+        document.createElement("p");
+
+      menuLabel.className =
+        "attendee-menu-label";
+
+      menuLabel.textContent =
+        "Menu";
+
+
+      wrapper.appendChild(menuLabel);
+
+
+      const menuOptions = [
+        "Meat",
+        "Vegetarian / Dairy Free"
+      ];
+
+
+      menuOptions.forEach(menu => {
+
+        const choice =
+          document.createElement("label");
+
+        choice.className =
+          "choice";
+
+
+        const radio =
+          document.createElement("input");
+
+        radio.type = "radio";
+
+        radio.name =
+          `menu-${index}`;
+
+        radio.value =
+          menu;
+
+        radio.checked =
+          person.menu === menu;
+
+
+        radio.addEventListener(
+          "change",
+          () => {
+
+            attendees[index].menu =
+              menu;
+
+          }
+        );
+
+
+        const span =
+          document.createElement("span");
+
+        span.textContent =
+          menu;
+
+
+        choice.appendChild(radio);
+        choice.appendChild(span);
+
+        wrapper.appendChild(choice);
+
+      });
+
+
+      attendeeList.appendChild(wrapper);
+
+    });
+
+
+    /*
+      Hide "Add a guest" once the invitation
+      has reached its maximum.
+    */
+
+    if (
+      attendees.length >=
+      currentInvitation.maxGuests
+    ) {
+
+      hide(addGuestButton);
+
+    } else {
+
+      show(addGuestButton);
+
+    }
+
+  }
+
+
+  function selectInvitation(invitation) {
+
+    currentInvitation =
+      invitation;
+
+
+    selectedName.textContent =
+      invitation.guestGroup;
+
+
+    invitationInfo.textContent =
+      `Your invitation is for up to ${invitation.maxGuests} guest${invitation.maxGuests === 1 ? "" : "s"}.`;
+
+
+    /*
+      If there is an existing Yes RSVP,
+      load those people so the guest can edit it.
+    */
+
+    if (
+      invitation.status === "Yes" &&
+      invitation.attendees.length > 0
+    ) {
+
+      attendees =
+        invitation.attendees.map(person => ({
+          name: person.name,
+          menu: person.menu
+        }));
+
+    } else {
+
+      attendees = [
+        {
+          name: invitation.guestGroup,
+          menu: ""
+        }
+      ];
+
+    }
+
+
+    document
+      .querySelectorAll(
+        'input[name="attendance"]'
+      )
+      .forEach(radio => {
+
+        radio.checked =
+          radio.value === invitation.status;
+
+      });
+
+
+    if (
+      invitation.status === "Yes"
+    ) {
+
+      show(attendeeSection);
+
+      renderAttendees();
+
+    } else {
+
+      hide(attendeeSection);
+
+      attendeeList.innerHTML = "";
+
+    }
+
+
+    hide(rsvpSearch);
+    show(rsvpForm);
+
+    rsvpMessage.textContent = "";
+
+  }
+
+
+  async function searchInvitation() {
 
     const name =
       searchInput.value.trim();
@@ -595,22 +825,18 @@
 
     if (!name) {
 
-      showMessage(
-        searchMessage,
-        "Please enter your name."
-      );
+      searchMessage.textContent =
+        "Please enter your name.";
 
       return;
 
     }
 
 
-    clearResults();
+    searchMessage.textContent =
+      "Searching…";
 
-    showMessage(
-      searchMessage,
-      "Looking for your name…"
-    );
+    guestResults.innerHTML = "";
 
 
     try {
@@ -625,29 +851,28 @@
         await response.json();
 
 
-      if (!data.matches || !data.matches.length) {
+      if (
+        !data.ok ||
+        !data.matches ||
+        data.matches.length === 0
+      ) {
 
-        showMessage(
-          searchMessage,
-          "We couldn't find that name. Please check the spelling and try again."
-        );
+        searchMessage.textContent =
+          "We couldn't find your name. Please try again.";
 
         return;
 
       }
 
 
-      showMessage(
-        searchMessage,
-        "Please select your name:"
-      );
+      searchMessage.textContent =
+        "";
 
 
-      data.matches.forEach((guest) => {
+      data.matches.forEach(invitation => {
 
         const button =
           document.createElement("button");
-
 
         button.type = "button";
 
@@ -655,12 +880,12 @@
           "guest-result";
 
         button.textContent =
-          guest.name;
+          invitation.guestGroup;
 
 
         button.addEventListener(
           "click",
-          () => selectGuest(guest)
+          () => selectInvitation(invitation)
         );
 
 
@@ -673,358 +898,328 @@
 
       console.error(error);
 
-      showMessage(
-        searchMessage,
-        "Something went wrong. Please try again."
-      );
+      searchMessage.textContent =
+        "We couldn't search for your name. Please try again.";
 
     }
 
   }
 
 
-  function selectGuest(guest) {
-
-    selectedGuest = guest;
-
-
-    rsvpSearch.classList.add("hidden");
-
-    rsvpForm.classList.remove("hidden");
+  searchButton.addEventListener(
+    "click",
+    searchInvitation
+  );
 
 
-    selectedName.textContent =
-      guest.name;
+  searchInput.addEventListener(
+    "keydown",
+    event => {
 
+      if (event.key === "Enter") {
 
-    if (
-      guest.status &&
-      guest.status !== "Not yet responded"
-    ) {
+        event.preventDefault();
 
-      currentResponse.textContent =
-        `We've already received your RSVP: ${guest.status}${guest.menu ? ` · ${guest.menu}` : ""}. You can change it below.`;
+        searchInvitation();
 
-    } else {
-
-      currentResponse.textContent =
-        "We haven't received your RSVP yet.";
+      }
 
     }
-
-
-    document
-      .querySelectorAll(
-        'input[name="attendance"]'
-      )
-      .forEach(
-        input => {
-          input.checked =
-            input.value === guest.status;
-        }
-      );
-
-
-    document
-      .querySelectorAll(
-        'input[name="menu"]'
-      )
-      .forEach(
-        input => {
-          input.checked =
-            input.value === guest.menu;
-        }
-      );
-
-
-    updateMenuVisibility();
-
-  }
-
-
-  function updateMenuVisibility() {
-
-    const attendance =
-      document.querySelector(
-        'input[name="attendance"]:checked'
-      );
-
-
-    if (
-      attendance &&
-      attendance.value === "Yes"
-    ) {
-
-      menuOptions.classList.remove(
-        "hidden"
-      );
-
-    } else {
-
-      menuOptions.classList.add(
-        "hidden"
-      );
-
-
-      document
-        .querySelectorAll(
-          'input[name="menu"]'
-        )
-        .forEach(
-          input => {
-            input.checked = false;
-          }
-        );
-
-    }
-
-  }
+  );
 
 
   document
     .querySelectorAll(
       'input[name="attendance"]'
     )
-    .forEach(
-      input => {
+    .forEach(radio => {
 
-        input.addEventListener(
-          "change",
-          updateMenuVisibility
-        );
+      radio.addEventListener(
+        "change",
+        () => {
 
-      }
-    );
+          if (radio.value !== "Yes") {
+            return;
+          }
 
+          if (
+            radio.checked
+          ) {
 
-  async function submitRsvp() {
+            show(attendeeSection);
 
-    if (!selectedGuest) {
-      return;
-    }
+            if (
+              attendees.length === 0
+            ) {
 
+              attendees = [
+                {
+                  name:
+                    currentInvitation.guestGroup,
+                  menu: ""
+                }
+              ];
 
-    const attendance =
-      document.querySelector(
-        'input[name="attendance"]:checked'
+            }
+
+            renderAttendees();
+
+          }
+
+        }
       );
 
-
-    if (!attendance) {
-
-      showMessage(
-        rsvpMessage,
-        "Please choose whether you'll be joining us."
-      );
-
-      return;
-
-    }
+    });
 
 
-    let menu = "";
+  addGuestButton.addEventListener(
+    "click",
+    () => {
 
-
-    if (attendance.value === "Yes") {
-
-      const menuChoice =
-        document.querySelector(
-          'input[name="menu"]:checked'
-        );
-
-
-      if (!menuChoice) {
-
-        showMessage(
-          rsvpMessage,
-          "Please choose your menu."
-        );
+      if (
+        attendees.length >=
+        currentInvitation.maxGuests
+      ) {
 
         return;
 
       }
 
 
-      menu =
-        menuChoice.value;
+      attendees.push({
+
+        name: "",
+
+        menu: ""
+
+      });
+
+
+      renderAttendees();
 
     }
-
-
-    submitButton.disabled = true;
-
-    showMessage(
-      rsvpMessage,
-      "Saving your RSVP…"
-    );
-
-
-    try {
-
-      const response =
-        await fetch(
-          RSVP_API,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "text/plain;charset=utf-8"
-            },
-
-            body: JSON.stringify({
-
-              action: "rsvp",
-
-              id:
-                selectedGuest.id,
-
-              status:
-                attendance.value,
-
-              menu:
-                menu
-
-            })
-
-          }
-        );
-
-
-      const data =
-        await response.json();
-
-
-      if (!data.ok) {
-
-        throw new Error(
-          data.error ||
-          "Unable to save RSVP"
-        );
-
-      }
-
-
-      selectedGuest.status =
-        data.status;
-
-      selectedGuest.menu =
-        data.menu;
-
-
-      rsvpForm.classList.add(
-        "hidden"
-      );
-
-      success.classList.remove(
-        "hidden"
-      );
-
-
-      confirmationText.textContent =
-        data.status === "Yes"
-          ? `We've saved your RSVP as attending, with the ${data.menu} menu.`
-          : "We've saved your RSVP as unable to attend.";
-
-    } catch (error) {
-
-      console.error(error);
-
-      showMessage(
-        rsvpMessage,
-        "We couldn't save your RSVP. Please try again."
-      );
-
-    } finally {
-
-      submitButton.disabled = false;
-
-    }
-
-  }
-
-
-  function resetRsvp() {
-
-    selectedGuest = null;
-
-
-    success.classList.add(
-      "hidden"
-    );
-
-    rsvpForm.classList.add(
-      "hidden"
-    );
-
-    rsvpSearch.classList.remove(
-      "hidden"
-    );
-
-
-    searchInput.value = "";
-
-    clearResults();
-
-    showMessage(
-      searchMessage,
-      ""
-    );
-
-    showMessage(
-      rsvpMessage,
-      ""
-    );
-
-  }
+  );
 
 
   submitButton.addEventListener(
     "click",
-    submitRsvp
-  );
+    async () => {
+
+      const selectedAttendance =
+        document.querySelector(
+          'input[name="attendance"]:checked'
+        );
 
 
-  changeGuest.addEventListener(
-    "click",
-    resetRsvp
-  );
+      if (!selectedAttendance) {
 
+        rsvpMessage.textContent =
+          "Please let us know if you'll be joining us.";
 
-  editRsvp.addEventListener(
-    "click",
-    () => {
-
-      success.classList.add(
-        "hidden"
-      );
-
-      rsvpForm.classList.remove(
-        "hidden"
-      );
-
-    }
-  );
-
-
-  searchButton.addEventListener(
-    "click",
-    searchGuest
-  );
-
-
-  searchInput.addEventListener(
-    "keydown",
-    (event) => {
-
-      if (event.key === "Enter") {
-
-        searchGuest();
+        return;
 
       }
 
+
+      const status =
+        selectedAttendance.value;
+
+
+      /*
+        Validate the attendees if attending.
+      */
+
+      if (status === "Yes") {
+
+        if (
+          attendees.length === 0
+        ) {
+
+          rsvpMessage.textContent =
+            "Please add at least one guest.";
+
+          return;
+
+        }
+
+
+        if (
+          attendees.length >
+          currentInvitation.maxGuests
+        ) {
+
+          rsvpMessage.textContent =
+            `Your invitation allows a maximum of ${currentInvitation.maxGuests} guests.`;
+
+          return;
+
+        }
+
+
+        for (
+          const person of attendees
+        ) {
+
+          if (
+            !person.name.trim()
+          ) {
+
+            rsvpMessage.textContent =
+              "Please enter the name of every guest.";
+
+            return;
+
+          }
+
+
+          if (!person.menu) {
+
+            rsvpMessage.textContent =
+              `Please choose a menu for ${person.name}.`;
+
+            return;
+
+          }
+
+        }
+
+      }
+
+
+      submitButton.disabled = true;
+
+      submitButton.textContent =
+        "Saving your RSVP…";
+
+      rsvpMessage.textContent =
+        "";
+
+
+      try {
+
+        const response =
+          await fetch(
+            RSVP_API,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "text/plain;charset=utf-8"
+              },
+
+              body: JSON.stringify({
+
+                action: "rsvp",
+
+                invitationId:
+                  currentInvitation.invitationId,
+
+                status:
+                  status,
+
+                attendees:
+                  status === "Yes"
+                    ? attendees
+                    : []
+
+              })
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!data.ok) {
+
+          throw new Error(
+            data.error ||
+            "Unable to save RSVP"
+          );
+
+        }
+
+
+        /*
+          Show a proper confirmation screen.
+        */
+
+        hide(rsvpForm);
+        show(rsvpSuccess);
+
+
+        if (status === "Yes") {
+
+          confirmationText.textContent =
+            `We've received your RSVP: ${data.guestCount} guest${data.guestCount === 1 ? "" : "s"}.`;
+
+        } else {
+
+          confirmationText.textContent =
+            "We've received your RSVP. We're sorry you can't make it, but thank you for letting us know.";
+
+        }
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        rsvpMessage.textContent =
+          "We couldn't save your RSVP. Please try again.";
+
+      }
+
+
+      submitButton.disabled = false;
+
+      submitButton.textContent =
+        "Confirm RSVP";
+
     }
   );
+
+
+  changeGuestButton.addEventListener(
+    "click",
+    () => {
+
+      currentInvitation = null;
+
+      attendees = [];
+
+      hide(rsvpForm);
+
+      hide(rsvpSuccess);
+
+      show(rsvpSearch);
+
+      searchInput.value = "";
+
+      searchMessage.textContent = "";
+
+      guestResults.innerHTML = "";
+
+    }
+  );
+
+
+  editRsvpButton.addEventListener(
+    "click",
+    () => {
+
+      hide(rsvpSuccess);
+
+      show(rsvpForm);
+
+      rsvpMessage.textContent = "";
+
+    }
+  );
+
 </script>
 </body>
 </html>
