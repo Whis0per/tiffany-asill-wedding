@@ -296,31 +296,9 @@
 
   <fieldset>
 
-    <legend>
-      Will you be joining us?
-
-<div id="attendee-section">
-
-  <fieldset>
-
-    <legend>
-      Who will be attending?
-    </legend>
-
-    <p class="attendee-intro">
-      Please let us know for each person on your invitation.
-    </p>
-
-    <div id="attendee-list"></div>
-
-  </fieldset>
-
-</div>
-
 
   <div
     id="attendee-section"
-    class="hidden"
   >
 
     <fieldset>
@@ -330,14 +308,6 @@
       </legend>
 
       <div id="attendee-list"></div>
-
-      <button
-        id="add-guest"
-        class="text-button"
-        type="button"
-      >
-        + Add a guest
-      </button>
 
     </fieldset>
 
@@ -550,9 +520,6 @@
 
   const attendeeList =
     document.getElementById("attendee-list");
-
-  const addGuestButton =
-    document.getElementById("add-guest");
 
   const submitButton =
     document.getElementById("submit-rsvp");
@@ -925,33 +892,8 @@ function renderAttendees() {
 }
 
 
-    document
-      .querySelectorAll(
-        'input[name="attendance"]'
-      )
-      .forEach(radio => {
-
-        radio.checked =
-          radio.value === invitation.status;
-
-      });
-
-
-    if (
-      invitation.status === "Yes"
-    ) {
-
-      show(attendeeSection);
-
-      renderAttendees();
-
-    } else {
-
-      hide(attendeeSection);
-
-      attendeeList.innerHTML = "";
-
-    }
+show(attendeeSection);
+renderAttendees();
 
 
     hide(rsvpSearch);
@@ -1275,102 +1217,6 @@ function renderAttendees() {
 
   }
 );
-
-      submitButton.disabled = true;
-
-      submitButton.textContent =
-        "Saving your RSVP…";
-
-      rsvpMessage.textContent =
-        "";
-
-
-      try {
-
-        const response =
-          await fetch(
-            RSVP_API,
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "text/plain;charset=utf-8"
-              },
-
-              body: JSON.stringify({
-
-                action: "rsvp",
-
-                invitationId:
-                  currentInvitation.invitationId,
-
-                status:
-                  status,
-
-                attendees:
-                  status === "Yes"
-                    ? attendees
-                    : []
-
-              })
-
-            }
-          );
-
-
-        const data =
-          await response.json();
-
-
-        if (!data.ok) {
-
-          throw new Error(
-            data.error ||
-            "Unable to save RSVP"
-          );
-
-        }
-
-
-        /*
-          Show a proper confirmation screen.
-        */
-
-        hide(rsvpForm);
-        show(rsvpSuccess);
-
-
-        if (status === "Yes") {
-
-          confirmationText.textContent =
-            `We've received your RSVP: ${data.guestCount} guest${data.guestCount === 1 ? "" : "s"}.`;
-
-        } else {
-
-          confirmationText.textContent =
-            "We've received your RSVP. We're sorry you can't make it, but thank you for letting us know.";
-
-        }
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        rsvpMessage.textContent =
-          "We couldn't save your RSVP. Please try again.";
-
-      }
-
-
-      submitButton.disabled = false;
-
-      submitButton.textContent =
-        "Confirm RSVP";
-
-    }
-  );
 
 
   changeGuestButton.addEventListener(
