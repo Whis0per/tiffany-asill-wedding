@@ -844,19 +844,83 @@ function renderAttendees() {
     */
 
     if (
-      invitation.status === "Yes" &&
-      invitation.attendees.length > 0
-    ) {
+  invitation.status === "Yes" &&
+  invitation.attendees.length > 0
+) {
 
-      attendees =
-        invitation.attendees.map(person => ({
-          name: person.name,
-          menu: person.menu
-        }));
+  const savedAttendees =
+    invitation.attendees.map(person => ({
+      name:
+        person.name,
 
-  } else {
+      status:
+        "Yes",
 
-  attendees = [];
+      menu:
+        person.menu
+
+    }));
+
+
+  const invitedGuests =
+    invitation.invitedGuests || [];
+
+
+  attendees =
+    invitedGuests.map(
+      guestName => {
+
+        const saved =
+          savedAttendees.find(
+            person =>
+              person.name === guestName
+          );
+
+
+        if (saved) {
+
+          return saved;
+
+        }
+
+
+        return {
+
+          name:
+            guestName,
+
+          status:
+            "",
+
+          menu:
+            ""
+
+        };
+
+      }
+    );
+
+} else {
+
+  const invitedGuests =
+    invitation.invitedGuests || [];
+
+
+  attendees =
+    invitedGuests.map(
+      guestName => ({
+
+        name:
+          guestName,
+
+        status:
+          "",
+
+        menu:
+          ""
+
+      })
+    );
 
 }
 
@@ -1078,89 +1142,208 @@ function renderAttendees() {
 
 
   submitButton.addEventListener(
-    "click",
-    async () => {
+  "click",
+  async () => {
 
-      const selectedAttendance =
-        document.querySelector(
-          'input[name="attendance"]:checked'
+    const invitedGuests =
+      currentInvitation.invitedGuests || [];
+
+
+    /*
+      Everyone must explicitly answer Yes or No.
+    */
+
+    if (
+      attendees.length !==
+      invitedGuests.length
+    ) {
+
+      rsvpMessage.textContent =
+        "Please choose Yes or No for everyone on your invitation.";
+
+      return;
+
+    }
+
+
+    /*
+      Make sure every invited person
+      has an explicit Yes or No.
+    */
+
+    for (
+      const guestName of invitedGuests
+    ) {
+
+      const person =
+        attendees.find(
+          person =>
+            person.name === guestName
         );
 
 
-      if (!selectedAttendance) {
+      if (
+        !person ||
+        !person.status
+      ) {
 
         rsvpMessage.textContent =
-          "Please let us know if you'll be joining us.";
+          `Please choose Yes or No for ${guestName}.`;
 
         return;
 
       }
 
 
-      const status =
-        selectedAttendance.value;
-
-
       /*
-        Validate the attendees if attending.
+        Anyone attending needs a menu.
       */
 
-      if (status === "Yes") {
+      if (
+        person.status === "Yes" &&
+        !person.menu
+      ) {
 
-        if (
-          attendees.length === 0
-        ) {
+        rsvpMessage.textContent =
+          `Please choose a menu for ${guestName}.`;
 
-          rsvpMessage.textContent =
-            "Please add at least one guest.";
-
-          return;
-
-        }
-
-
-        if (
-          attendees.length >
-          currentInvitation.maxGuests
-        ) {
-
-          rsvpMessage.textContent =
-            `Your invitation allows a maximum of ${currentInvitation.maxGuests} guests.`;
-
-          return;
-
-        }
-
-
-        for (
-          const person of attendees
-        ) {
-
-          if (
-            !person.name.trim()
-          ) {
-
-            rsvpMessage.textContent =
-              "Please enter the name of every guest.";
-
-            return;
-
-          }
-
-
-          if (!person.menu) {
-
-            rsvpMessage.textContent =
-              `Please choose a menu for ${person.name}.`;
-
-            return;
-
-          }
-
-        }
+        return;
 
       }
 
+    }
+
+
+    /*
+      Only Yes guests count as attending.
+    */
+
+    const attendingGuests =
+      attendees.filter(
+        person =>
+          person.status === "Yes"
+      );
+
+
+    /*
+      At least one person must attend.
+    */
+
+    if (
+      attendingGuests.length === 0
+    ) {
+
+      rsvpMessage.textContent =
+        "Please select at least one person who is attending.";
+
+      return;
+
+    }
+
+
+    /*
+      Check the invitation limit.
+    */
+
+    if (
+      attendingGuests.length >
+      currentInvitation.maxGuests
+    ) {
+
+      rsvpMessage.textContent =
+        `Your invitation allows a maximum of ${currentInvitation.maxGuests} guests.`;
+
+      return;
+
+    }
+
+
+    submitButton.disabled = true;
+
+    submitButton.textContent =
+      "Saving your RSVP…";
+
+    rsvpMessage.textContent =
+      "";
+
+
+    try {
+
+      const response =
+        await fetch(
+          RSVP_API,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "text/plain;charset=utf-8"
+            },
+
+            body: JSON.stringify({
+
+              action:
+                "rsvp",
+
+              invitationId:
+                currentInvitation.invitationId,
+
+              /*
+                The invitation is Yes if
+                at least one person attends.
+              */
+
+              status:
+                "Yes",
+
+              attendees:
+                attendingGuests
+
+            })
+
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!data.ok) {
+
+        throw new Error(
+          data.error ||
+          "Unable to save RSVP"
+        );
+
+      }
+
+
+      hide(rsvpForm);
+      show(rsvpSuccess);
+
+
+      confirmationText.textContent =
+        `We've received your RSVP: ${data.guestCount} guest${data.guestCount === 1 ? "" : "s"}.`;
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      rsvpMessage.textContent =
+        "We couldn't save your RSVP. Please try again.";
+
+    }
+
+
+    submitButton.disabled = false;
+
+    submitButton.textContent =
+      "Confirm RSVP";
+
+  }
+);
 
       submitButton.disabled = true;
 
