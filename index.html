@@ -1098,21 +1098,6 @@ renderAttendees();
       );
 
 
-    /*
-      At least one person must attend.
-    */
-
-    if (
-      attendingGuests.length === 0
-    ) {
-
-      rsvpMessage.textContent =
-        "Please select at least one person who is attending.";
-
-      return;
-
-    }
-
 
     /*
       Check the invitation limit.
@@ -1167,7 +1152,7 @@ renderAttendees();
               */
 
               status:
-                "Yes",
+                attendingGuests.length > 0 ? "Yes" : "No",
 
               attendees:
                 attendingGuests
