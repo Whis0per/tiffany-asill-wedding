@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -301,19 +305,23 @@
       ></p>
 
 
-      <div id="attendee-section">
+      <fieldset>
 
-        <fieldset>
+        <div id="attendee-section">
 
-          <legend>
-            Who will be attending?
-          </legend>
+          <fieldset>
 
-          <div id="attendee-list"></div>
+            <legend>
+              Who will be attending?
+            </legend>
 
-        </fieldset>
+            <div id="attendee-list"></div>
 
-      </div>
+          </fieldset>
+
+        </div>
+
+      </fieldset>
 
 
       <button
@@ -647,10 +655,6 @@
     }
 
 
-    /* =========================
-       RENDER ATTENDEES
-       ========================= */
-
     function renderAttendees() {
 
       attendeeList.innerHTML = "";
@@ -752,21 +756,6 @@
                     existing.status =
                       status;
 
-                    /*
-                      If the person changes
-                      from Yes to No,
-                      remove their menu.
-                    */
-
-                    if (
-                      status === "No"
-                    ) {
-
-                      existing.menu =
-                        "";
-
-                    }
-
                   } else {
 
                     attendees.push({
@@ -830,11 +819,6 @@
                 person.name === guestName
             );
 
-
-          /*
-            MENU ONLY FOR PEOPLE
-            WHO ARE ATTENDING
-          */
 
           if (
             person?.status === "Yes"
@@ -939,10 +923,6 @@
     }
 
 
-    /* =========================
-       SELECT INVITATION
-       ========================= */
-
     function selectInvitation(
       invitation
     ) {
@@ -959,36 +939,54 @@
         `Your invitation is for up to ${invitation.maxGuests} guest${invitation.maxGuests === 1 ? "" : "s"}.`;
 
 
-      const invitedGuests =
-        invitation.invitedGuests || [];
-
-
       /*
-        Load existing response.
-
-        YES people are restored as Yes
-        with their menu.
-
-        NO people remain available
-        to answer again.
+        If there is an existing Yes RSVP,
+        load those people so the guest can edit it.
       */
 
-      const savedAttendees =
-        invitation.attendees || [];
+      if (
+        invitation.status === "Yes" &&
+        invitation.attendees.length > 0
+      ) {
+
+        const savedAttendees =
+          invitation.attendees.map(
+            (person) => ({
+
+              name:
+                person.name,
+
+              status:
+                "Yes",
+
+              menu:
+                person.menu
+
+            })
+          );
 
 
-      attendees =
-        invitedGuests.map(
-          (guestName) => {
-
-            const saved =
-              savedAttendees.find(
-                (person) =>
-                  person.name === guestName
-              );
+        const invitedGuests =
+          invitation.invitedGuests || [];
 
 
-            if (saved) {
+        attendees =
+          invitedGuests.map(
+            (guestName) => {
+
+              const saved =
+                savedAttendees.find(
+                  (person) =>
+                    person.name === guestName
+                );
+
+
+              if (saved) {
+
+                return saved;
+
+              }
+
 
               return {
 
@@ -996,17 +994,25 @@
                   guestName,
 
                 status:
-                  saved.status || "",
+                  "",
 
                 menu:
-                  saved.menu || ""
+                  ""
 
               };
 
             }
+          );
+
+      } else {
+
+        const invitedGuests =
+          invitation.invitedGuests || [];
 
 
-            return {
+        attendees =
+          invitedGuests.map(
+            (guestName) => ({
 
               name:
                 guestName,
@@ -1017,10 +1023,10 @@
               menu:
                 ""
 
-            };
+            })
+          );
 
-          }
-        );
+      }
 
 
       show(attendeeSection);
@@ -1037,10 +1043,6 @@
 
     }
 
-
-    /* =========================
-       SEARCH INVITATION
-       ========================= */
 
     async function searchInvitation() {
 
@@ -1166,10 +1168,6 @@
     );
 
 
-    /* =========================
-       SUBMIT RSVP
-       ========================= */
-
     submitButton.addEventListener(
       "click",
       async () => {
@@ -1179,8 +1177,25 @@
 
 
         /*
-          EVERY invited person must
-          explicitly choose Yes or No.
+          Everyone must explicitly answer Yes or No.
+        */
+
+        if (
+          attendees.length !==
+          invitedGuests.length
+        ) {
+
+          rsvpMessage.textContent =
+            "Please choose Yes or No for everyone on your invitation.";
+
+          return;
+
+        }
+
+
+        /*
+          Make sure every invited person
+          has an explicit Yes or No.
         */
 
         for (
@@ -1208,8 +1223,7 @@
 
 
           /*
-            Anyone attending needs
-            a menu.
+            Anyone attending needs a menu.
           */
 
           if (
@@ -1239,7 +1253,7 @@
 
 
         /*
-          Check invitation limit.
+          Check the invitation limit.
         */
 
         if (
@@ -1253,20 +1267,6 @@
           return;
 
         }
-
-
-        /*
-          Invitation status:
-
-          At least one Yes = Yes
-
-          Everyone No = No
-        */
-
-        const invitationStatus =
-          attendingGuests.length > 0
-            ? "Yes"
-            : "No";
 
 
         submitButton.disabled =
@@ -1304,18 +1304,15 @@
                     invitationId:
                       currentInvitation.invitationId,
 
-                    status:
-                      invitationStatus,
-
                     /*
-                      IMPORTANT:
-
-                      Send EVERY invited person,
-                      including people who answered No.
-
-                      The Apps Script must save
-                      these individual responses.
+                      The invitation is Yes if
+                      at least one person attends.
                     */
+
+                    status:
+                      attendingGuests.length > 0
+                        ? "Yes"
+                        : "No",
 
                     attendees:
                       attendees
@@ -1350,7 +1347,7 @@
           ) {
 
             confirmationText.textContent =
-              `We've received your RSVP: ${attendingGuests.length} guest${attendingGuests.length === 1 ? "" : "s"}.`;
+              `We've received your RSVP: ${data.guestCount} guest${data.guestCount === 1 ? "" : "s"}.`;
 
           } else {
 
@@ -1358,7 +1355,6 @@
               "We've received your response. We're sorry you can't make it, but thank you for letting us know.";
 
           }
-
 
         } catch (error) {
 
@@ -1379,10 +1375,6 @@
       }
     );
 
-
-    /* =========================
-       CHANGE GUEST
-       ========================= */
 
     changeGuestButton.addEventListener(
       "click",
@@ -1415,10 +1407,6 @@
     );
 
 
-    /* =========================
-       EDIT RSVP
-       ========================= */
-
     editRsvpButton.addEventListener(
       "click",
       () => {
@@ -1436,4 +1424,5 @@
   </script>
 
 </body>
+
 </html>
