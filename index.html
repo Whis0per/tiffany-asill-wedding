@@ -1180,12 +1180,20 @@ renderAttendees();
       hide(rsvpForm);
       show(rsvpSuccess);
 
+      if (attendingGuests.length > 0) {
 
-      confirmationText.textContent =
-        `We've received your RSVP: ${data.guestCount} guest${data.guestCount === 1 ? "" : "s"}.`;
+  confirmationText.textContent =
+    `We've received your RSVP: ${data.guestCount} guest${data.guestCount === 1 ? "" : "s"}.`;
 
+} else {
 
-    } catch (error) {
+  confirmationText.textContent =
+    "We've received your response. We're sorry you can't make it, but thank you for letting us know.";
+
+}
+
+   
+     } catch (error) {
 
       console.error(error);
 
