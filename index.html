@@ -935,8 +935,15 @@
         invitation.guestGroup;
 
 
-      invitationInfo.textContent =
-        `Your invitation is for up to ${invitation.maxGuests} guest${invitation.maxGuests === 1 ? "" : "s"}.`;
+      const currentStatus =
+  invitation.status === "Yes"
+    ? "Your current response: Yes, attending."
+    : invitation.status === "No"
+      ? "Your current response: No, not attending."
+      : `Your invitation is for up to ${invitation.maxGuests} guest${invitation.maxGuests === 1 ? "" : "s"}.`;
+
+invitationInfo.textContent =
+  currentStatus;
 
 
       /*
@@ -944,89 +951,54 @@
         load those people so the guest can edit it.
       */
 
-      if (
-        invitation.status === "Yes" &&
-        invitation.attendees.length > 0
-      ) {
+      const invitedGuests =
+  invitation.invitedGuests || [];
 
-        const savedAttendees =
-          invitation.attendees.map(
-            (person) => ({
+const savedAttendees =
+  invitation.attendees || [];
 
-              name:
-                person.name,
+attendees =
+  invitedGuests.map(
+    (guestName) => {
 
-              status:
-                "Yes",
+      const saved =
+        savedAttendees.find(
+          (person) =>
+            person.name === guestName
+        );
 
-              menu:
-                person.menu
+      if (saved) {
 
-            })
-          );
+        return {
 
+          name:
+            guestName,
 
-        const invitedGuests =
-          invitation.invitedGuests || [];
+          status:
+            saved.status || "",
 
+          menu:
+            saved.menu || ""
 
-        attendees =
-          invitedGuests.map(
-            (guestName) => {
-
-              const saved =
-                savedAttendees.find(
-                  (person) =>
-                    person.name === guestName
-                );
-
-
-              if (saved) {
-
-                return saved;
-
-              }
-
-
-              return {
-
-                name:
-                  guestName,
-
-                status:
-                  "",
-
-                menu:
-                  ""
-
-              };
-
-            }
-          );
-
-      } else {
-
-        const invitedGuests =
-          invitation.invitedGuests || [];
-
-
-        attendees =
-          invitedGuests.map(
-            (guestName) => ({
-
-              name:
-                guestName,
-
-              status:
-                "",
-
-              menu:
-                ""
-
-            })
-          );
+        };
 
       }
+
+      return {
+
+        name:
+          guestName,
+
+        status:
+          "",
+
+        menu:
+          ""
+
+      };
+
+    }
+  );
 
 
       show(attendeeSection);
