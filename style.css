@@ -1005,3 +1005,26 @@ fieldset legend {
 .attendee input[type="radio"] {
   margin-right: 0.5rem;
 }
+
+.map-preview {
+  margin-top: 20px;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.map-preview iframe {
+  display: block;
+}
+
+.map-link {
+  margin-top: 14px;
+}
+
+.map-link a {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
