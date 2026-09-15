@@ -747,11 +747,12 @@ footer {
 }
 
 .english-heading {
+  display: block;
   font-size: 0.55em;
   font-style: italic;
   font-weight: 400;
   opacity: 0.65;
-  margin-left: 3px;
+  margin-top: -4px;
 }
 
 .rsvp-message {
