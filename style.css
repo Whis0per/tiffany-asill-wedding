@@ -1002,3 +1002,7 @@ fieldset legend {
 .attendee input[type="radio"] {
   margin-right: 0.5rem;
 }
+
+.final-details {
+  margin-top: 28px;
+}
