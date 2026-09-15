@@ -533,7 +533,7 @@ a {
 }
 
 .final h2 {
-  margin: 25px 0 45px;
+  margin: 25px 0 70px;
   font-family: "Allura", cursive;
   font-size: clamp(75px, 13vw, 170px);
   font-weight: 400;
@@ -1004,8 +1004,4 @@ fieldset legend {
 .attendee input[type="checkbox"],
 .attendee input[type="radio"] {
   margin-right: 0.5rem;
-}
-
-.final-details {
-  margin-top: 28px;
 }
