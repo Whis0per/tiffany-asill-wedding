@@ -402,8 +402,6 @@ a {
 
 .gallery img:nth-child(3) {
   height: 450px;
-  object-fit: contain;
-  background: var(--warm-white);
 }
 
 .gallery img:nth-child(4) {
