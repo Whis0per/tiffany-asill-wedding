@@ -59,11 +59,14 @@ a {
   justify-content: space-between;
   align-items: center;
 
-  padding: 25px 5vw;
+  padding: 18px 5vw;
 
-  color: white;
+  color: var(--dark);
 
-  mix-blend-mode: difference;
+  background: rgba(250, 248, 244, 0.92);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .logo {
