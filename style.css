@@ -383,34 +383,24 @@ a {
 
 .gallery {
   display: grid;
-
   grid-template-columns: repeat(2, 1fr);
-
   gap: 18px;
-
   max-width: 1150px;
-
   margin: auto;
 }
 
 .gallery img {
-  height: 600px;
-
-  object-fit: cover;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .gallery img:nth-child(2) {
   margin-top: 100px;
 }
 
-.gallery img:nth-child(3) {
-  height: 450px;
-}
-
 .gallery img:nth-child(4) {
   margin-top: -50px;
-
-  height: 600px;
 }
 
 .stock-note {
