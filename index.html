@@ -678,6 +678,11 @@ mainNav.querySelectorAll("a").forEach((link) => {
       document.getElementById(
         "invitation-info"
       );
+    
+    const churchJune19Inputs =
+      document.querySelectorAll(
+        'input[name="church-june-19"]'
+      );
 
     const attendeeSection =
       document.getElementById(
@@ -1032,7 +1037,16 @@ mainNav.querySelectorAll("a").forEach((link) => {
 
 invitationInfo.textContent =
   currentStatus;
+      
+churchJune19Inputs.forEach(
+  (radio) => {
 
+    radio.checked =
+      radio.value ===
+      invitation.churchJune19;
+
+  }
+);
 
       /*
         If there is an existing Yes RSVP,
@@ -1235,6 +1249,23 @@ attendees =
         const invitedGuests =
           currentInvitation.invitedGuests || [];
 
+        const selectedChurch =
+          document.querySelector(
+            'input[name="church-june-19"]:checked'
+          );
+        
+        if (!selectedChurch) {
+        
+          rsvpMessage.textContent =
+            "Please let us know if you'll be joining us at church on June 19.";
+        
+          return;
+        
+        }
+        
+        const churchJune19 =
+          selectedChurch.value;
+
 
         /*
           Everyone must explicitly answer Yes or No.
@@ -1373,6 +1404,9 @@ attendees =
                       attendingGuests.length > 0
                         ? "Yes"
                         : "No",
+                    
+                    churchJune19:
+                      churchJune19,
 
                     attendees:
                       attendees
