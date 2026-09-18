@@ -372,6 +372,7 @@ a {
   line-height: 0.75;
 }
 
+/* CHATEAU DETAILS */ .venue-details { background: var(--cream); color: var(--dark); padding: 55px 7vw 80px; text-align: center; } .venue-address { margin: 0 auto 35px; font-size: 14px; line-height: 1.8; } .venue-address strong { font-family: var(--serif); font-size: 22px; font-weight: 400; } .map-preview { max-width: 900px; margin: 0 auto; border: 1px solid var(--line); overflow: hidden; } .map-preview iframe { display: block; width: 100%; height: 300px; } .map-link { margin: 18px 0 0; } .map-link a { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; text-decoration: underline; text-underline-offset: 4px; } /* ------------------------------ MOBILE ------------------------------ */ @media (max-width: 750px) { .venue { min-height: 80vh; } .venue-content { padding: 10vw 7vw; } .venue-details { padding: 45px 7vw 65px; } .map-preview iframe { height: 260px; } }
 
 /* ------------------------------
    GALLERY
@@ -998,28 +999,6 @@ fieldset legend {
   margin-right: 0.5rem;
 }
 
-.map-preview {
-  margin-top: 20px;
-  border-radius: 2px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-}
-
-.map-preview iframe {
-  display: block;
-}
-
-.map-link {
-  margin-top: 14px;
-}
-
-.map-link a {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
 
 .menu-toggle {
   display: none;
