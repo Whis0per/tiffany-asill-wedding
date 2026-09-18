@@ -277,7 +277,7 @@
     </div>
 
 
-    <!-- STEP 2: RSVP -->
+  <!-- STEP 2: RSVP -->
 
 <div
   id="rsvp-form"
@@ -293,6 +293,37 @@
     class="current-response"
   ></p>
 
+
+  <!-- CHURCH — JUNE 19 -->
+
+  <fieldset>
+
+    <legend>
+      Will you be joining us at church on June 19?
+    </legend>
+
+    <label class="choice">
+      <input
+        type="radio"
+        name="church-june-19"
+        value="Yes"
+      >
+      <span>Yes, we'll be there</span>
+    </label>
+
+    <label class="choice">
+      <input
+        type="radio"
+        name="church-june-19"
+        value="No"
+      >
+      <span>No, we won't be there</span>
+    </label>
+
+  </fieldset>
+
+
+  <!-- WEDDING — JUNE 21 -->
 
   <fieldset>
 
@@ -547,6 +578,11 @@
 
   const invitationInfo =
     document.getElementById("invitation-info");
+
+  const churchJune19Inputs =
+    document.querySelectorAll(
+      'input[name="church-june-19"]'
+    );
 
   const attendeeSection =
     document.getElementById("attendee-section");
@@ -869,6 +905,13 @@
 
       });
 
+    churchJune19Inputs.forEach(radio => {
+
+      radio.checked =
+        radio.value === invitation.churchJune19;
+    
+    });
+
 
     if (
       invitation.status === "Yes"
@@ -1102,6 +1145,23 @@
       const status =
         selectedAttendance.value;
 
+      const selectedChurch =
+        document.querySelector(
+          'input[name="church-june-19"]:checked'
+        );
+
+      if (!selectedChurch) {
+      
+        rsvpMessage.textContent =
+          "Please let us know if you'll be joining us at church on June 19.";
+      
+        return;
+      
+      }
+      
+      const churchJune19 =
+        selectedChurch.value;
+
 
       /*
         Validate the attendees if attending.
@@ -1195,6 +1255,9 @@
 
                 status:
                   status,
+                
+                churchJune19:
+                  churchJune19,
 
                 attendees:
                   status === "Yes"
