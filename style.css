@@ -387,7 +387,7 @@ a {
 
 .map-preview {
   width: min(500px, 100%);
-  margin: 0 auto;
+  margin: 0;
   border: 1px solid var(--line);
   overflow: hidden;
 }
