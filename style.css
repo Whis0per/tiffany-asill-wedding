@@ -324,14 +324,12 @@ a {
 
 .venue {
   position: relative;
-
   min-height: 90vh;
-
   display: flex;
-  align-items: flex-end;
-
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
   color: white;
-
   overflow: hidden;
 }
 
@@ -495,7 +493,7 @@ a {
 }
 
 .questions details[open] summary::after {
-  content: "âˆ’";
+  content: "-";
 }
 
 .questions details p {
@@ -1006,6 +1004,16 @@ fieldset legend {
 
 .map-preview iframe {
   display: block;
+  width: 100%;
+  height: 300px;
+}
+
+.venue > p,
+.venue > .map-preview {
+  position: relative;
+  z-index: 2;
+  margin-left: 8vw;
+  margin-right: 8vw;
 }
 
 .map-link {
