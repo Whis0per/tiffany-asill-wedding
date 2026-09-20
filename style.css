@@ -433,8 +433,9 @@ a {
 } 
 
 .gallery img :nth-child(1) { 
-  height: 450px; 
-  margin-top: 100px;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
 } 
 
 .gallery img :nth-child(2) { 
