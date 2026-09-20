@@ -433,9 +433,11 @@ a {
 } 
 
 .gallery img :nth-child(1) { 
-  height: auto;
-  aspect-ratio: 3 / 2;
+  width: 100%;
+  height: auto !important;
+  aspect-ratio: auto !important;
   object-fit: contain;
+  margin-top: -50px;
 } 
 
 .gallery img :nth-child(2) { 
