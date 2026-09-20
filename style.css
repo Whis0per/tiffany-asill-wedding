@@ -433,18 +433,16 @@ a {
 } 
 
 .gallery img:nth-child(1) { 
-  width: 100%;
-  height: auto !important;
-  aspect-ratio: auto !important;
-  object-fit: contain;
-  margin-top: -50px;
-} 
+  height: 600px; 
+  margin-top: 100px;
+}
 
 .gallery img:nth-child(2) { 
   height: 600px;
 } 
 
 .gallery img:nth-child(3) { 
+  margin-top: -50px;
   height: 600px;
 } 
 
@@ -453,6 +451,7 @@ a {
 } 
 
 .gallery img:nth-child(5) {
+  margin-top: -50px;
   height: 600px;
 }
 
