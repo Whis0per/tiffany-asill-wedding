@@ -432,25 +432,25 @@ a {
   object-fit: cover;
 } 
 
-.gallery img:nth-child(1) { 
-  height: 600px; 
+.gallery img:nth-child(2) { 
+  height: 450px; 
   margin-top: 100px;
 }
 
-.gallery img:nth-child(2) { 
+.gallery img:nth-child(3) { 
   height: 600px;
 } 
 
-.gallery img:nth-child(3) { 
+.gallery img:nth-child(4) { 
   margin-top: -50px;
   height: 600px;
 } 
 
-.gallery img:nth-child(4) {
+.gallery img:nth-child(5) {
   height: 600px;
 } 
 
-.gallery img:nth-child(5) {
+.gallery img:nth-child(6) {
   margin-top: -50px;
   height: 600px;
 }
